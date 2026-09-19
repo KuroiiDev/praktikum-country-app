@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'detail.dart';
+import 'history.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,6 +14,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<List<Country>> countries;
+  bool isByRegion = false;
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +39,22 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Countries')),
+      appBar: AppBar(
+        title: const Text('Countries'),
+        actions: [
+          IconButton(
+            icon: Icon(
+              isByRegion ? Icons.public : Icons.sort_by_alpha,
+            ),
+            tooltip: isByRegion ? 'Normal' : 'Benua',
+            onPressed: () {
+              setState(() {
+                isByRegion = !isByRegion;
+              });
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Country>>(
         future: countries,
         builder: (context, snapshot) {
@@ -47,7 +65,18 @@ class _HomePageState extends State<HomePage> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No countries found'));
           }
-          final list = snapshot.data!;
+          final list = List<Country>.from(snapshot.data!);
+          if (isByRegion) {
+            list.sort((a, b) {
+              final regionCmp =
+                  a.region.toLowerCase().compareTo(b.region.toLowerCase());
+              if (regionCmp != 0) return regionCmp;
+              return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+            });
+          } else {
+            list.sort(
+                (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+          }
           return ListView.builder(
             itemCount: list.length,
             itemBuilder: (context, i) {
@@ -60,6 +89,7 @@ class _HomePageState extends State<HomePage> {
                   title: Text(country.name),
                   subtitle: Text(country.region),
                   onTap: () {
+                    HistoryManager.add(country);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
