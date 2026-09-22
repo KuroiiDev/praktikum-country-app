@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'detail.dart';
+import 'favorite.dart';
 import 'history.dart';
 
 class HomePage extends StatefulWidget {
@@ -43,9 +44,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Countries'),
         actions: [
           IconButton(
-            icon: Icon(
-              isByRegion ? Icons.public : Icons.sort_by_alpha,
-            ),
+            icon: Icon(isByRegion ? Icons.public : Icons.sort_by_alpha),
             tooltip: isByRegion ? 'Normal' : 'Benua',
             onPressed: () {
               setState(() {
@@ -68,19 +67,22 @@ class _HomePageState extends State<HomePage> {
           final list = List<Country>.from(snapshot.data!);
           if (isByRegion) {
             list.sort((a, b) {
-              final regionCmp =
-                  a.region.toLowerCase().compareTo(b.region.toLowerCase());
+              final regionCmp = a.region.toLowerCase().compareTo(
+                b.region.toLowerCase(),
+              );
               if (regionCmp != 0) return regionCmp;
               return a.name.toLowerCase().compareTo(b.name.toLowerCase());
             });
           } else {
             list.sort(
-                (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+              (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+            );
           }
           return ListView.builder(
             itemCount: list.length,
             itemBuilder: (context, i) {
               final country = list[i];
+              final isFav = FavoriteManager.isFavorite(country);
               return Card(
                 child: ListTile(
                   leading: country.flagsPng != null
@@ -88,14 +90,26 @@ class _HomePageState extends State<HomePage> {
                       : const SizedBox(width: 50),
                   title: Text(country.name),
                   subtitle: Text(country.region),
-                  onTap: () {
+                  trailing: IconButton(
+                    icon: Icon(
+                      isFav ? Icons.star : Icons.star_border,
+                      color: isFav ? Colors.amber : null,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        FavoriteManager.toggle(country);
+                      });
+                    },
+                  ),
+                  onTap: () async {
                     HistoryManager.add(country);
-                    Navigator.push(
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailPage(country: country),
                       ),
                     );
+                    setState(() {});
                   },
                 ),
               );

@@ -1,45 +1,71 @@
 import 'package:flutter/material.dart';
 
+import 'favorite.dart';
 import 'home.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final Country country;
   const DetailPage({super.key, required this.country});
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
+    final isFav = FavoriteManager.isFavorite(widget.country);
     return Scaffold(
-      appBar: AppBar(title: Text(country.name)),
+      appBar: AppBar(
+        title: Text(widget.country.name),
+        actions: [
+          IconButton(
+            icon: Icon(
+              isFav ? Icons.star : Icons.star_border,
+              color: isFav ? Colors.amber : null,
+            ),
+            tooltip: isFav ? 'Hapus dari Favorit' : 'Tambah ke Favorit',
+            onPressed: () {
+              setState(() {
+                FavoriteManager.toggle(widget.country);
+              });
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (country.flagsPng != null)
-              Center(child: Image.network(country.flagsPng!, width: 200)),
+            if (widget.country.flagsPng != null)
+              Center(
+                child: Image.network(widget.country.flagsPng!, width: 200),
+              ),
             const SizedBox(height: 16),
-            Text('Name: ${country.name}', style: const TextStyle(fontSize: 18)),
             Text(
-              'Capital: ${country.capital ?? 'N/A'}',
+              'Name: ${widget.country.name}',
+              style: const TextStyle(fontSize: 18),
+            ),
+            Text(
+              'Capital: ${widget.country.capital ?? 'N/A'}',
               style: const TextStyle(fontSize: 16),
             ),
             Text(
-              'Region: ${country.region}',
+              'Region: ${widget.country.region}',
               style: const TextStyle(fontSize: 16),
             ),
             Text(
-              'Population: ${country.population}',
-
+              'Population: ${widget.country.population}',
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 8),
             Text(
-              'Languages: ${country.languages?.join(', ') ?? 'N/A'}',
-
+              'Languages: ${widget.country.languages?.join(', ') ?? 'N/A'}',
               style: const TextStyle(fontSize: 16),
             ),
             Text(
-              'Currencies: ${country.currencies?.join(', ') ?? 'N/A'}',
-
+              'Currencies: ${widget.country.currencies?.join(', ') ?? 'N/A'}',
               style: const TextStyle(fontSize: 16),
             ),
           ],

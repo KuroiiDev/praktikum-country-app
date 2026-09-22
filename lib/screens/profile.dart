@@ -45,7 +45,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     255,
                     255,
                     252,
-
                     252,
                   ).withValues(alpha: 128),
                 ),
