@@ -37,9 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   image: const DecorationImage(
                     fit: BoxFit.cover,
                     alignment: Alignment.topCenter,
-                    image: NetworkImage(
-                      'https://thumbs.dreamstime.com/b/pink-sky-green-pastel-summer-background-cloud-sunset-cloudy-landscape-dusk-beautiful-light-wallpaper-dramatic-scenic-sunrise-462297784.jpg',
-                    ),
+                    image: AssetImage('lib/team.jpg'),
                   ),
                   color: const Color.fromARGB(
                     255,
