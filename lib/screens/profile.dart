@@ -11,6 +11,9 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final List<Map<String, String>> teamMembers = [
     {'Nama': 'Maitsam Kadzim', 'NIM': '21120124140161'},
+    {'Nama': 'Gotara Adi Prasetiyo', 'NIM': '21120124140157'},
+    {'Nama': 'Faiz Alif Rahmawan', 'NIM': '2112012413063'},
+    {'Nama': 'Rafi Nurulhuda', 'NIM': '2112012413053'},
   ];
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     fit: BoxFit.cover,
                     alignment: Alignment.topCenter,
                     image: NetworkImage(
-                      'https://images.unsplash.com/photo-1431440869543-efaf3388c585?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YWVzdGhldGljJTIwd2FsbHBhcGVyfGVufDB8fDB8fHwws',
+                      'https://thumbs.dreamstime.com/b/pink-sky-green-pastel-summer-background-cloud-sunset-cloudy-landscape-dusk-beautiful-light-wallpaper-dramatic-scenic-sunrise-462297784.jpg',
                     ),
                   ),
                   color: const Color.fromARGB(
@@ -61,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                        'https://i.pinimg.com/736x/65/7c/a5/657ca5303a3a4b44b3d201c59d8df245.jpg',
+                        'https://maitsam-kadzim.my.id/images/profile.png',
                       ),
                     ),
                   ),
